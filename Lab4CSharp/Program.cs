@@ -1,42 +1,105 @@
-﻿// See https://aka.ms/new-console-template for more information
-/// <summary>
-///  Top-level statements 
-///  Код програми (оператори)  вищого рівня
-/// </summary>
-///
-Console.WriteLine("Lab4 C# ");
-AnyFunc();
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.Metrics;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using static Lab4CSharp.Lab4;
 
-/// <summary>
-/// 
-///  Top-level statements must precede namespace and type declarations.
-/// At the top-level methods/functions can be defined and used
-/// На верхньому рівні можна визначати та використовувати методи/функції
-/// </summary>
-void AnyFunc()
+namespace Lab4CSharp
 {
-    Console.WriteLine(" Some function in top-level");
+    class Lab4
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("What task do you want?");
+            Console.WriteLine("1. Task 1");
+            Console.WriteLine("2. Task 2");
+            Console.WriteLine("3. Task 2");
+            Console.WriteLine("4. Exit");
+
+            int choice;
+            bool isValidChoice = false;
+
+            do
+            {
+                Console.Write("Enter number of task ");
+                isValidChoice = int.TryParse(Console.ReadLine(), out choice);
+
+                if (!isValidChoice || choice < 1 || choice > 4)
+                {
+                    Console.WriteLine("This task not exist");
+                    isValidChoice = false;
+                }
+            } while (!isValidChoice);
+            switch (choice)
+            {
+                case 1:
+                    task1();
+                    break;
+                case 2:
+                    task2();
+                    break;
+                case 3:
+                    task3();
+                    break;
+                case 4:
+                    break;
+            }
+        }
+
+        public class ITriangle
+        {
+            protected int a, b;
+            protected int c;
+            public ITriangle(int Base, int side, int color)
+            {
+                a = Base;
+                b = side;
+                c = color;
+            }
+            public int this[int i]
+            {
+                get
+                {
+                    if (i < 0 || i >= 3) throw new Exception("Error");
+                    else if (i == 0) return a;
+                    else if (i == 1) return b;
+                    else
+                    {
+                        return c;
+                    }
+                }
+            }
+        }
+       
+
+        static void task1()
+        {
+            Console.Write("Enter index of value = ");
+            int n = int.Parse(Console.ReadLine());
+            var array = new ITriangle(3, 5, 6);
+            try
+            {
+                Console.WriteLine($"a[{n}]={array[n]}");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+
+
+        static void task2()
+        {
+
+
+        }
+        static void task3()
+        {
+
+
+        }
+    }
 }
-Console.WriteLine("Problems 1 ");
-AnyFunc();
-//  приклад класів
-UserClass cl = new UserClass();
-cl.Name = " UserClass top-level ";
-Lab4CSharp.UserClass cl2 = new Lab4CSharp.UserClass();
-cl2.Name = " UserClass namespace Lab4CSharp ";
-Console.WriteLine(cl + "   " + cl2 + "   ");
-
-
-
-/// <summary>
-/// 
-/// Top-level statements must precede namespace and type declarations.
-/// Оператори верхнього рівня мають передувати оголошенням простору імен і типу.
-/// Створення класу(ів) або оголошенням простору імен є закіченням  іструкцій верхнього рівня
-/// 
-/// </summary>
-
-class UserClass
-{
-    public string Name { get; set; }
-};
