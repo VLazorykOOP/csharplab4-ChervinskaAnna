@@ -118,7 +118,7 @@ class Program
         ITriangle Operator1 = triangle++;
         Console.WriteLine("Operator++" + Operator1);
         ITriangle Operator2 = triangle--;
-        Console.WriteLine("Operator2" + Operator2);
+        Console.WriteLine("Operator--" + Operator2);
 
         ITriangle anothertriangle = new ITriangle(2, 12, "Blue");
 
@@ -141,9 +141,49 @@ class Program
 
         int[]Scalar = new int[2] { 2, 3 };
         ITriangle Operator3 = triangle * Scalar;
-        Console.WriteLine("Operator3" + Operator3);
+        Console.WriteLine("Operator*" + Operator3);
     }
 
+    class VectorDecimal
+    {
+        decimal[] ArrayDecimal;
+        uint num;
+        int codeError;
+        static uint num_vec;
+
+        public VectorDecimal()
+        {
+            ArrayDecimal = new decimal[1];
+            num = 1;
+            codeError = 0;
+            num_vec++;
+        }
+        public VectorDecimal(uint size)
+        {
+            ArrayDecimal = new decimal[size];
+            num = size;
+            codeError = 0;
+            num_vec++;
+        }
+        public VectorDecimal(uint size, decimal initValue)
+        {
+            ArrayDecimal = new decimal[size];
+            num = size;
+            codeError = 0;
+            num_vec++;
+
+            for (int i = 0; i < size; i++)
+            {
+                ArrayDecimal[i] = initValue;
+            }
+        }
+
+        ~VectorDecimal()
+        {
+            Console.WriteLine("Vector has been destructed.");
+        }
+
+    }
     static void task2()
     {
 
