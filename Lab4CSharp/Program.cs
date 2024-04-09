@@ -95,14 +95,15 @@ class Program
             return !(triangle.a + triangle.a > triangle.b);
         }
 
-        public static ITriangle operator *(ITriangle triangle, int [] scalar)
+        public static ITriangle operator *(ITriangle triangle, int[] scalar)
         {
             triangle.a *= scalar[0];
             triangle.b *= scalar[1];
             return (triangle);
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
 
             return $"a: {this.a}; b: {this.b}; color: {this.color} ";
         }
@@ -126,7 +127,8 @@ class Program
         {
             Console.WriteLine($"triangle {triangle} exists");
         }
-        else {
+        else
+        {
             Console.WriteLine($"triangle {triangle} doesn't exists");
         }
 
@@ -139,7 +141,7 @@ class Program
             Console.WriteLine($"triangle {anothertriangle} doesn't exists");
         }
 
-        int[]Scalar = new int[2] { 2, 3 };
+        int[] Scalar = new int[2] { 2, 3 };
         ITriangle Operator3 = triangle * Scalar;
         Console.WriteLine("Operator*" + Operator3);
     }
@@ -551,7 +553,6 @@ class Program
         protected int codeError;
         protected static int num_mf;
 
-        // Конструктор без параметрів
         public DecimalMatrix()
         {
             n = 1;
@@ -561,7 +562,6 @@ class Program
             num_mf++;
         }
 
-        // Конструктор із двома параметрами
         public DecimalMatrix(uint n, uint m)
         {
             this.n = n;
@@ -571,7 +571,6 @@ class Program
             num_mf++;
         }
 
-        // Конструктор із трьома параметрами
         public DecimalMatrix(uint n, uint m, decimal initialValue)
         {
             this.n = n;
@@ -588,26 +587,23 @@ class Program
             num_mf++;
         }
 
-        // Деструктор
         ~DecimalMatrix()
         {
-            Console.WriteLine("Матриця була знищена.");
+            Console.WriteLine("Matrix has been destructed.");
         }
 
-        // Метод для вводу елементів матриці з клавіатури
         public void InputElements()
         {
             for (uint i = 0; i < n; i++)
             {
                 for (uint j = 0; j < m; j++)
                 {
-                    Console.Write("Елемент [{0}, {1}]: ", i, j);
+                    Console.Write("Element [{0}, {1}]: ", i, j);
                     DCArray[i, j] = Convert.ToDecimal(Console.ReadLine());
                 }
             }
         }
 
-        // Метод для виводу елементів матриці на екран
         public void DisplayElements()
         {
             for (uint i = 0; i < n; i++)
@@ -620,7 +616,6 @@ class Program
             }
         }
 
-        // Метод для присвоєння всім елементам матриці певного значення
         public void Assign(decimal value)
         {
             for (uint i = 0; i < n; i++)
@@ -637,20 +632,17 @@ class Program
             return num_mf;
         }
 
-        // Властивість для отримання розмірності матриці
         public uint[] Dimensions
         {
             get { return new uint[] { n, m }; }
         }
 
-        // Властивість для отримання і встановлення коду помилки
         public int ErrorCode
         {
             get { return codeError; }
             set { codeError = value; }
         }
 
-        // Індексатор з двома індексами
         public decimal this[uint i, uint j]
         {
             get
@@ -672,7 +664,6 @@ class Program
             }
         }
 
-        // Індексатор з одним індексом
         public decimal this[uint k]
         {
             get
@@ -698,7 +689,6 @@ class Program
             }
         }
 
-        // Перевантаження унарних операцій
         public static DecimalMatrix operator ++(DecimalMatrix dm)
         {
             for (uint i = 0; i < dm.n; i++)
@@ -767,31 +757,574 @@ class Program
             }
             return dm;
         }
+
+        public static DecimalMatrix operator +(DecimalMatrix matrix1, DecimalMatrix matrix2)
+        {
+            if (matrix1.n != matrix2.n || matrix1.m != matrix2.m)
+            {
+                Console.WriteLine("Matrices must have the same dimensions to perform addition.");
+                return null;
+            }
+
+            DecimalMatrix result = new DecimalMatrix(matrix1.n, matrix1.m);
+
+            for (uint i = 0; i < matrix1.n; i++)
+            {
+                for (uint j = 0; j < matrix1.m; j++)
+                {
+                    result[i, j] = matrix1[i, j] + matrix2[i, j];
+                }
+            }
+
+            return result;
+        }
+
+        public static DecimalMatrix operator +(DecimalMatrix matrix, decimal scalar)
+        {
+            DecimalMatrix result = new DecimalMatrix(matrix.n, matrix.m);
+
+            for (uint i = 0; i < matrix.n; i++)
+            {
+                for (uint j = 0; j < matrix.m; j++)
+                {
+                    result[i, j] = matrix[i, j] + scalar;
+                }
+            }
+
+            return result;
+        }
+
+        public static DecimalMatrix operator -(DecimalMatrix matrix1, DecimalMatrix matrix2)
+        {
+            if (matrix1.n != matrix2.n || matrix1.m != matrix2.m)
+            {
+                Console.WriteLine("Matrices must have the same dimensions to perform subtraction.");
+                return null;
+            }
+
+            DecimalMatrix result = new DecimalMatrix(matrix1.n, matrix1.m);
+
+            for (uint i = 0; i < matrix1.n; i++)
+            {
+                for (uint j = 0; j < matrix1.m; j++)
+                {
+                    result[i, j] = matrix1[i, j] - matrix2[i, j];
+                }
+            }
+
+            return result;
+        }
+
+        public static DecimalMatrix operator -(DecimalMatrix matrix, decimal scalar)
+        {
+            DecimalMatrix result = new DecimalMatrix(matrix.n, matrix.m);
+
+            for (uint i = 0; i < matrix.n; i++)
+            {
+                for (uint j = 0; j < matrix.m; j++)
+                {
+                    result[i, j] = matrix[i, j] - scalar;
+                }
+            }
+
+            return result;
+        }
+
+        public static DecimalMatrix operator *(DecimalMatrix matrix1, DecimalMatrix matrix2)
+        {
+            if (matrix1.m != matrix2.n)
+            {
+                Console.WriteLine("The number of columns in the first matrix must be equal to the number of rows in the second matrix for multiplication.");
+                return null;
+            }
+
+            DecimalMatrix result = new DecimalMatrix(matrix1.n, matrix2.m);
+
+            for (uint i = 0; i < matrix1.n; i++)
+            {
+                for (uint j = 0; j < matrix2.m; j++)
+                {
+                    decimal sum = 0;
+                    for (uint k = 0; k < matrix1.m; k++)
+                    {
+                        sum += matrix1[i, k] * matrix2[k, j];
+                    }
+                    result[i, j] = sum;
+                }
+            }
+
+            return result;
+        }
+
+        public static DecimalMatrix operator *(DecimalMatrix matrix, decimal scalar)
+        {
+            DecimalMatrix result = new DecimalMatrix(matrix.n, matrix.m);
+
+            for (uint i = 0; i < matrix.n; i++)
+            {
+                for (uint j = 0; j < matrix.m; j++)
+                {
+                    result[i, j] = matrix[i, j] * scalar;
+                }
+            }
+
+            return result;
+        }
+
+        public static DecimalMatrix operator /(DecimalMatrix matrix1, DecimalMatrix matrix2)
+        {
+            if (matrix1.m != matrix2.n)
+            {
+                Console.WriteLine("The number of columns in the first matrix must be equal to the number of rows in the second matrix for division.");
+                return null;
+            }
+
+            // Assuming matrix2 is invertible
+            // For simplicity, let's just return the product of matrix1 and the inverse of matrix2
+            return matrix1 * Inverse(matrix2);
+        }
+
+        public static DecimalMatrix operator /(DecimalMatrix matrix, decimal scalar)
+        {
+            DecimalMatrix result = new DecimalMatrix(matrix.n, matrix.m);
+
+            for (uint i = 0; i < matrix.n; i++)
+            {
+                for (uint j = 0; j < matrix.m; j++)
+                {
+                    result[i, j] = matrix[i, j] / scalar;
+                }
+            }
+
+            return result;
+        }
+
+        public static DecimalMatrix operator %(DecimalMatrix matrix1, DecimalMatrix matrix2)
+        {
+            if (matrix1.n != matrix2.n || matrix1.m != matrix2.m)
+            {
+                Console.WriteLine("Matrices must have the same dimensions to perform modulo operation.");
+                return null;
+            }
+
+            DecimalMatrix result = new DecimalMatrix(matrix1.n, matrix1.m);
+
+            for (uint i = 0; i < matrix1.n; i++)
+            {
+                for (uint j = 0; j < matrix1.m; j++)
+                {
+                    result[i, j] = matrix1[i, j] % matrix2[i, j];
+                }
+            }
+
+            return result;
+        }
+
+        public static DecimalMatrix operator %(DecimalMatrix matrix, decimal scalar)
+        {
+            DecimalMatrix result = new DecimalMatrix(matrix.n, matrix.m);
+
+            for (uint i = 0; i < matrix.n; i++)
+            {
+                for (uint j = 0; j < matrix.m; j++)
+                {
+                    result[i, j] = matrix[i, j] % scalar;
+                }
+            }
+
+            return result;
+        }
+
+        public static DecimalMatrix operator |(DecimalMatrix matrix1, DecimalMatrix matrix2)
+        {
+            if (matrix1.n != matrix2.n || matrix1.m != matrix2.m)
+            {
+                Console.WriteLine("Matrices must have the same dimensions to perform bitwise OR operation.");
+                return null;
+            }
+
+            DecimalMatrix result = new DecimalMatrix(matrix1.n, matrix1.m);
+
+            for (uint i = 0; i < matrix1.n; i++)
+            {
+                for (uint j = 0; j < matrix1.m; j++)
+                {
+                    long intValue1 = decimal.ToInt64(matrix1[i, j]);
+                    long intValue2 = decimal.ToInt64(matrix2[i, j]);
+                    long resultValue = intValue1 | intValue2;
+                    result[i, j] = decimal.FromOACurrency(resultValue);
+                }
+            }
+
+            return result;
+        }
+
+        public static DecimalMatrix operator |(DecimalMatrix matrix, decimal scalar)
+        {
+            DecimalMatrix result = new DecimalMatrix(matrix.n, matrix.m);
+
+            long scalarValue = decimal.ToInt64(scalar);
+
+            for (uint i = 0; i < matrix.n; i++)
+            {
+                for (uint j = 0; j < matrix.m; j++)
+                {
+                    long intValue = decimal.ToInt64(matrix[i, j]);
+                    long resultValue = intValue | scalarValue;
+                    result[i, j] = decimal.FromOACurrency(resultValue);
+                }
+            }
+
+            return result;
+        }
+
+        public static DecimalMatrix operator ^(DecimalMatrix matrix1, DecimalMatrix matrix2)
+        {
+            if (matrix1.n != matrix2.n || matrix1.m != matrix2.m)
+            {
+                Console.WriteLine("Matrices must have the same dimensions to perform bitwise XOR operation.");
+                return null;
+            }
+
+            DecimalMatrix result = new DecimalMatrix(matrix1.n, matrix1.m);
+
+            for (uint i = 0; i < matrix1.n; i++)
+            {
+                for (uint j = 0; j < matrix1.m; j++)
+                {
+                    long intValue1 = decimal.ToInt64(matrix1[i, j]);
+                    long intValue2 = decimal.ToInt64(matrix2[i, j]);
+                    long resultValue = intValue1 ^ intValue2;
+                    result[i, j] = decimal.FromOACurrency(resultValue);
+                }
+            }
+
+            return result;
+        }
+
+        public static DecimalMatrix operator ^(DecimalMatrix matrix, decimal scalar)
+        {
+            DecimalMatrix result = new DecimalMatrix(matrix.n, matrix.m);
+
+            long scalarValue = decimal.ToInt64(scalar);
+
+            for (uint i = 0; i < matrix.n; i++)
+            {
+                for (uint j = 0; j < matrix.m; j++)
+                {
+                    long intValue = decimal.ToInt64(matrix[i, j]);
+                    long resultValue = intValue ^ scalarValue;
+                    result[i, j] = decimal.FromOACurrency(resultValue);
+                }
+            }
+
+            return result;
+        }
+
+        public static DecimalMatrix operator &(DecimalMatrix matrix1, DecimalMatrix matrix2)
+        {
+            if (matrix1.n != matrix2.n || matrix1.m != matrix2.m)
+            {
+                Console.WriteLine("Matrices must have the same dimensions to perform bitwise AND operation.");
+                return null;
+            }
+
+            DecimalMatrix result = new DecimalMatrix(matrix1.n, matrix1.m);
+
+            for (uint i = 0; i < matrix1.n; i++)
+            {
+                for (uint j = 0; j < matrix1.m; j++)
+                {
+                    long intValue1 = decimal.ToInt64(matrix1[i, j]);
+                    long intValue2 = decimal.ToInt64(matrix2[i, j]);
+                    long resultValue = intValue1 & intValue2;
+                    result[i, j] = decimal.FromOACurrency(resultValue);
+                }
+            }
+
+            return result;
+        }
+
+        public static DecimalMatrix operator &(DecimalMatrix matrix, decimal scalar)
+        {
+            DecimalMatrix result = new DecimalMatrix(matrix.n, matrix.m);
+
+            long scalarValue = decimal.ToInt64(scalar);
+
+            for (uint i = 0; i < matrix.n; i++)
+            {
+                for (uint j = 0; j < matrix.m; j++)
+                {
+                    long intValue = decimal.ToInt64(matrix[i, j]);
+                    long resultValue = intValue & scalarValue;
+                    result[i, j] = decimal.FromOACurrency(resultValue);
+                }
+            }
+
+            return result;
+        }
+
+        public static bool operator ==(DecimalMatrix matrix1, DecimalMatrix matrix2)
+        {
+            if (ReferenceEquals(matrix1, matrix2))
+            {
+                return true;
+            }
+
+            if (matrix1 is null || matrix2 is null)
+            {
+                return false;
+            }
+
+            if (matrix1.n != matrix2.n || matrix1.m != matrix2.m)
+            {
+                return false;
+            }
+
+            for (uint i = 0; i < matrix1.n; i++)
+            {
+                for (uint j = 0; j < matrix1.m; j++)
+                {
+                    if (matrix1[i, j] != matrix2[i, j])
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public static bool operator !=(DecimalMatrix matrix1, DecimalMatrix matrix2)
+        {
+            return !(matrix1 == matrix2);
+        }
+
+        public static bool operator >(DecimalMatrix matrix1, DecimalMatrix matrix2)
+        {
+            if (matrix1.n != matrix2.n || matrix1.m != matrix2.m)
+            {
+                return false;
+            }
+
+            for (uint i = 0; i < matrix1.n; i++)
+            {
+                for (uint j = 0; j < matrix1.m; j++)
+                {
+                    if (matrix1[i, j] <= matrix2[i, j])
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public static bool operator >=(DecimalMatrix matrix1, DecimalMatrix matrix2)
+        {
+            if (matrix1.n != matrix2.n || matrix1.m != matrix2.m)
+            {
+                return false;
+            }
+
+            for (uint i = 0; i < matrix1.n; i++)
+            {
+                for (uint j = 0; j < matrix1.m; j++)
+                {
+                    if (matrix1[i, j] < matrix2[i, j])
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public static bool operator <(DecimalMatrix matrix1, DecimalMatrix matrix2)
+        {
+            if (matrix1.n != matrix2.n || matrix1.m != matrix2.m)
+            {
+                return false;
+            }
+
+            for (uint i = 0; i < matrix1.n; i++)
+            {
+                for (uint j = 0; j < matrix1.m; j++)
+                {
+                    if (matrix1[i, j] >= matrix2[i, j])
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public static bool operator <=(DecimalMatrix matrix1, DecimalMatrix matrix2)
+        {
+            if (matrix1.n != matrix2.n || matrix1.m != matrix2.m)
+            {
+                return false;
+            }
+
+            for (uint i = 0; i < matrix1.n; i++)
+            {
+                for (uint j = 0; j < matrix1.m; j++)
+                {
+                    if (matrix1[i, j] > matrix2[i, j])
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private static DecimalMatrix Inverse(DecimalMatrix matrix)
+        {
+            Console.WriteLine("Inverse not implemented. Returning the original matrix.");
+            return matrix;
+        }
     }
 
-    static void task3()
+    public static void task3()
     {
-        DecimalMatrix matrix = new DecimalMatrix(2, 3, 5); // Створення матриці розміром 2x3 зі значенням ініціалізації 5
+        DecimalMatrix matrix = new DecimalMatrix(2, 3, 3);
         Console.WriteLine("Size of matrix: {0}x{1}", matrix.Dimensions[0], matrix.Dimensions[1]);
         Console.WriteLine("Element of matrix:");
         matrix.DisplayElements();
 
-        matrix[0, 1] = 10; // Приклад використання індексатора з двома індексами
+        matrix[0, 1] = 10;
         Console.WriteLine("\nMatrix after change [0, 1]:");
         matrix.DisplayElements();
 
         Console.WriteLine("\nChange all elements to 8:");
-        matrix.Assign(8); // Приклад використання методу Assign
+        matrix.Assign(8);
         matrix.DisplayElements();
 
         Console.WriteLine("\nEnter new element:");
-        matrix.InputElements(); // Введення нових значень з клавіатури
+        matrix.InputElements();
         Console.WriteLine("\nElement after change:");
         matrix.DisplayElements();
 
         Console.WriteLine("\nThe number of matrix: {0}", DecimalMatrix.CountMatrices());
 
-        Console.ReadKey();
+        DecimalMatrix matrix1 = new DecimalMatrix(2, 3, 7);
+        Console.WriteLine("Matrix1 elements:");
+        matrix1.DisplayElements();
+
+        DecimalMatrix matrix2 = new DecimalMatrix(2, 3, 1);
+        Console.WriteLine("\nMatrix2 elements:");
+        matrix2.DisplayElements();
+
+
+        Console.WriteLine("Size of matrix1: {0}x{1}", matrix1.Dimensions[0], matrix1.Dimensions[1]);
+        Console.WriteLine("Size of matrix2: {0}x{1}", matrix2.Dimensions[0], matrix2.Dimensions[1]);
+
+
+        DecimalMatrix matrixSum = matrix1 + matrix2;
+        if (matrixSum != null)
+        {
+            Console.WriteLine("\nSum of matrices:");
+            matrixSum.DisplayElements();
+        }
+
+        DecimalMatrix matrixScalarSum = matrix1 + 10;
+        Console.WriteLine("\nSum of matrix1 and scalar:");
+        matrixScalarSum.DisplayElements();
+
+        DecimalMatrix matrixDiff = matrix1 - matrix2;
+        if (matrixDiff != null)
+        {
+            Console.WriteLine("\nDifference of matrices:");
+            matrixDiff.DisplayElements();
+        }
+
+        DecimalMatrix matrixScalarDiff = matrix1 - 5;
+        Console.WriteLine("\nDifference of matrix1 and scalar:");
+        matrixScalarDiff.DisplayElements();
+
+        DecimalMatrix matrixProduct = matrix1 * matrix2;
+        if (matrixProduct != null)
+        {
+            Console.WriteLine("\nElement-wise multiplication of matrices:");
+            matrixProduct.DisplayElements();
+        }
+
+        DecimalMatrix matrixScalarProduct = matrix1 * 2;
+        Console.WriteLine("\nMultiplication of matrix1 by scalar:");
+        matrixScalarProduct.DisplayElements();
+
+        DecimalMatrix matrixDivision = matrix1 / matrix2;
+        if (matrixDivision != null)
+        {
+            Console.WriteLine("\nElement-wise division of matrices:");
+            matrixDivision.DisplayElements();
+        }
+
+        DecimalMatrix matrixScalarDivision = matrix1 / 2;
+        Console.WriteLine("\nDivision of matrix1 by scalar:");
+        matrixScalarDivision.DisplayElements();
+
+        DecimalMatrix matrixRemainder = matrix1 % matrix2;
+        if (matrixRemainder != null)
+        {
+            Console.WriteLine("\nElement-wise remainder of matrices:");
+            matrixRemainder.DisplayElements();
+        }
+
+        DecimalMatrix matrixScalarRemainder = matrix1 % 3;
+        Console.WriteLine("\nRemainder of matrix1 by scalar:");
+        matrixScalarRemainder.DisplayElements();
+
+        Console.WriteLine("\nBitwise OR operation between matrix1 and matrix2:");
+        DecimalMatrix bitwiseOR = matrix1 | matrix2;
+        bitwiseOR.DisplayElements();
+
+        Console.WriteLine("\nBitwise OR operation between matrix1 and scalar:");
+        DecimalMatrix bitwiseORScalar = matrix1 | 5;
+        bitwiseORScalar.DisplayElements();
+
+        Console.WriteLine("\nBitwise XOR operation between matrix1 and matrix2:");
+        DecimalMatrix bitwiseXOR = matrix1 ^ matrix2;
+        bitwiseXOR.DisplayElements();
+
+        Console.WriteLine("\nBitwise XOR operation between matrix1 and scalar:");
+        DecimalMatrix bitwiseXORScalar = matrix1 ^ 5;
+        bitwiseXORScalar.DisplayElements();
+
+        Console.WriteLine("\nBitwise AND operation between matrix1 and matrix2:");
+        DecimalMatrix bitwiseAND = matrix1 & matrix2;
+        bitwiseAND.DisplayElements();
+
+        Console.WriteLine("\nBitwise AND operation between matrix1 and scalar:");
+        DecimalMatrix bitwiseANDScalar = matrix1 & 5;
+        bitwiseANDScalar.DisplayElements();
+
+        Console.WriteLine("\nEquality check between matrix1 and matrix2:");
+        Console.WriteLine(matrix1 == matrix2);
+
+        Console.WriteLine("\nInequality check between matrix1 and matrix2:");
+        Console.WriteLine(matrix1 != matrix2);
+
+        Console.WriteLine("\nComparison: matrix1 greater than matrix2:");
+        Console.WriteLine(matrix1 > matrix2);
+
+        Console.WriteLine("\nComparison: matrix1 greater than or equal to matrix2:");
+        Console.WriteLine(matrix1 >= matrix2);
+
+        Console.WriteLine("\nComparison: matrix1 less than matrix2:");
+        Console.WriteLine(matrix1 < matrix2);
+
+        Console.WriteLine("\nComparison: matrix1 less than or equal to matrix2:");
+        Console.WriteLine(matrix1 <= matrix2);
+
+        Console.WriteLine("\nThe number of matrices: {0}", DecimalMatrix.CountMatrices());
     }
 }
+
 
