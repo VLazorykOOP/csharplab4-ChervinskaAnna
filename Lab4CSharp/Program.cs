@@ -192,7 +192,7 @@ class Program
                 if (!decimal.TryParse(Console.ReadLine(), out ArrayDecimal[i]))
                 {
                     Console.WriteLine("Invalid input! Please enter a valid decimal.");
-                    i--; 
+                    i--;
                 }
             }
         }
@@ -236,7 +236,7 @@ class Program
                 if (index < 0 || index >= ArrayDecimal.Length)
                 {
                     codeError = -1;
-                    return 0; 
+                    return 0;
                 }
                 else
                 {
@@ -257,6 +257,57 @@ class Program
                 }
             }
         }
+
+        public static VectorDecimal operator ++(VectorDecimal vector)
+        {
+            for (int i = 0; i < vector.ArrayDecimal.Length; i++)
+            {
+                vector.ArrayDecimal[i]++;
+            }
+            return vector;
+        }
+
+        public static VectorDecimal operator --(VectorDecimal vector)
+        {
+            for (int i = 0; i < vector.ArrayDecimal.Length; i++)
+            {
+                vector.ArrayDecimal[i]--;
+            }
+            return vector;
+        }
+
+        public static bool operator true(VectorDecimal vector)
+        {
+            if (vector.num != 0)
+            {
+                foreach (var element in vector.ArrayDecimal)
+                {
+                    if (element != 0)
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool operator false(VectorDecimal vector)
+        {
+            return !vector;
+        }
+
+        public static bool operator !(VectorDecimal vector)
+        {
+            return vector.num != 0;
+        }
+
+        public static VectorDecimal operator ~(VectorDecimal vector)
+        {
+            for (int i = 0; i < vector.ArrayDecimal.Length; i++)
+            {
+                vector.ArrayDecimal[i] = (decimal)~(int)vector.ArrayDecimal[i];
+            }
+            return vector;
+        }
+
 
     }
     static void task2()
@@ -280,8 +331,254 @@ class Program
         }
     }
 
+    class DecimalMatrix
+    {
+        protected decimal[,] DCArray;
+        protected uint n, m;
+        protected int codeError;
+        protected static int num_mf;
+
+        // Конструктор без параметрів
+        public DecimalMatrix()
+        {
+            n = 1;
+            m = 1;
+            DCArray = new decimal[n, m];
+            codeError = 0;
+            num_mf++;
+        }
+
+        // Конструктор із двома параметрами
+        public DecimalMatrix(uint n, uint m)
+        {
+            this.n = n;
+            this.m = m;
+            DCArray = new decimal[n, m];
+            codeError = 0;
+            num_mf++;
+        }
+
+        // Конструктор із трьома параметрами
+        public DecimalMatrix(uint n, uint m, decimal initialValue)
+        {
+            this.n = n;
+            this.m = m;
+            DCArray = new decimal[n, m];
+            for (uint i = 0; i < n; i++)
+            {
+                for (uint j = 0; j < m; j++)
+                {
+                    DCArray[i, j] = initialValue;
+                }
+            }
+            codeError = 0;
+            num_mf++;
+        }
+
+        // Деструктор
+        ~DecimalMatrix()
+        {
+            Console.WriteLine("Матриця була знищена.");
+        }
+
+        // Метод для вводу елементів матриці з клавіатури
+        public void InputElements()
+        {
+            for (uint i = 0; i < n; i++)
+            {
+                for (uint j = 0; j < m; j++)
+                {
+                    Console.Write("Елемент [{0}, {1}]: ", i, j);
+                    DCArray[i, j] = Convert.ToDecimal(Console.ReadLine());
+                }
+            }
+        }
+
+        // Метод для виводу елементів матриці на екран
+        public void DisplayElements()
+        {
+            for (uint i = 0; i < n; i++)
+            {
+                for (uint j = 0; j < m; j++)
+                {
+                    Console.Write(DCArray[i, j] + "\t");
+                }
+                Console.WriteLine();
+            }
+        }
+
+        // Метод для присвоєння всім елементам матриці певного значення
+        public void Assign(decimal value)
+        {
+            for (uint i = 0; i < n; i++)
+            {
+                for (uint j = 0; j < m; j++)
+                {
+                    DCArray[i, j] = value;
+                }
+            }
+        }
+
+        // Статичний метод для підрахунку кількості матриць
+        public static int CountMatrices()
+        {
+            return num_mf;
+        }
+
+        // Властивість для отримання розмірності матриці
+        public uint[] Dimensions
+        {
+            get { return new uint[] { n, m }; }
+        }
+
+        // Властивість для отримання і встановлення коду помилки
+        public int ErrorCode
+        {
+            get { return codeError; }
+            set { codeError = value; }
+        }
+
+        // Індексатор з двома індексами
+        public decimal this[uint i, uint j]
+        {
+            get
+            {
+                if (i < n && j < m)
+                    return DCArray[i, j];
+                else
+                {
+                    codeError = -1;
+                    return 0;
+                }
+            }
+            set
+            {
+                if (i < n && j < m)
+                    DCArray[i, j] = value;
+                else
+                    codeError = -1;
+            }
+        }
+
+        // Індексатор з одним індексом
+        public decimal this[uint k]
+        {
+            get
+            {
+                uint i = k / m;
+                uint j = k % m;
+                if (i < n && j < m)
+                    return DCArray[i, j];
+                else
+                {
+                    codeError = -1;
+                    return 0;
+                }
+            }
+            set
+            {
+                uint i = k / m;
+                uint j = k % m;
+                if (i < n && j < m)
+                    DCArray[i, j] = value;
+                else
+                    codeError = -1;
+            }
+        }
+
+        // Перевантаження унарних операцій
+        public static DecimalMatrix operator ++(DecimalMatrix dm)
+        {
+            for (uint i = 0; i < dm.n; i++)
+            {
+                for (uint j = 0; j < dm.m; j++)
+                {
+                    dm.DCArray[i, j]++;
+                }
+            }
+            return dm;
+        }
+
+        public static DecimalMatrix operator --(DecimalMatrix dm)
+        {
+            for (uint i = 0; i < dm.n; i++)
+            {
+                for (uint j = 0; j < dm.m; j++)
+                {
+                    dm.DCArray[i, j]--;
+                }
+            }
+            return dm;
+        }
+
+        public static bool operator true(DecimalMatrix dm)
+        {
+            for (uint i = 0; i < dm.n; i++)
+            {
+                for (uint j = 0; j < dm.m; j++)
+                {
+                    if (dm.DCArray[i, j] == 0)
+                        return false;
+                }
+            }
+            return true;
+        }
+
+        public static bool operator false(DecimalMatrix dm)
+        {
+            for (uint i = 0; i < dm.n; i++)
+            {
+                for (uint j = 0; j < dm.m; j++)
+                {
+                    if (dm.DCArray[i, j] == 0)
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool operator !(DecimalMatrix dm)
+        {
+            return dm.n != 0 && dm.m != 0;
+        }
+
+        public static DecimalMatrix operator ~(DecimalMatrix dm)
+        {
+            for (uint i = 0; i < dm.n; i++)
+            {
+                for (uint j = 0; j < dm.m; j++)
+                {
+                    long intValue = decimal.ToInt64(dm.DCArray[i, j]);
+                    intValue = ~intValue;
+                    dm.DCArray[i, j] = decimal.FromOACurrency(intValue);
+                }
+            }
+            return dm;
+        }
+    }
+
     static void task3()
     {
+        DecimalMatrix matrix = new DecimalMatrix(2, 3, 5); // Створення матриці розміром 2x3 зі значенням ініціалізації 5
+        Console.WriteLine("Size of matrix: {0}x{1}", matrix.Dimensions[0], matrix.Dimensions[1]);
+        Console.WriteLine("Element of matrix:");
+        matrix.DisplayElements();
 
+        matrix[0, 1] = 10; // Приклад використання індексатора з двома індексами
+        Console.WriteLine("\nMatrix after change [0, 1]:");
+        matrix.DisplayElements();
+
+        Console.WriteLine("\nChange all elements to 8:");
+        matrix.Assign(8); // Приклад використання методу Assign
+        matrix.DisplayElements();
+
+        Console.WriteLine("\nEnter new element:");
+        matrix.InputElements(); // Введення нових значень з клавіатури
+        Console.WriteLine("\nElement after change:");
+        matrix.DisplayElements();
+
+        Console.WriteLine("\nThe number of matrix: {0}", DecimalMatrix.CountMatrices());
+
+        Console.ReadKey();
     }
 }
