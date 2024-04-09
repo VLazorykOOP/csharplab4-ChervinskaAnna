@@ -308,8 +308,159 @@ class Program
             return vector;
         }
 
+        public static VectorDecimal operator +(VectorDecimal vector1, VectorDecimal vector2)
+        {
+            if (vector1.Size != vector2.Size)
+            {
+                Console.WriteLine("Vectors must have the same size to perform addition.");
+                return null;
+            }
+
+            VectorDecimal result = new VectorDecimal(vector1.Size);
+
+            for (int i = 0; i < result.Size; i++)
+            {
+                result[i] = vector1[i] + vector2[i];
+            }
+
+            return result;
+        }
+
+        public static VectorDecimal operator +(VectorDecimal vector, decimal scalar)
+        {
+            VectorDecimal result = new VectorDecimal(vector.Size);
+
+            for (int i = 0; i < result.Size; i++)
+            {
+                result[i] = vector[i] + scalar;
+            }
+
+            return result;
+        }
+
+        public static VectorDecimal operator -(VectorDecimal vector1, VectorDecimal vector2)
+        {
+            if (vector1.Size != vector2.Size)
+            {
+                Console.WriteLine("Vectors must have the same size to perform subtraction.");
+                return null;
+            }
+
+            VectorDecimal result = new VectorDecimal(vector1.Size);
+
+            for (int i = 0; i < result.Size; i++)
+            {
+                result[i] = vector1[i] - vector2[i];
+            }
+
+            return result;
+        }
+
+        public static VectorDecimal operator -(VectorDecimal vector, decimal scalar)
+        {
+            VectorDecimal result = new VectorDecimal(vector.Size);
+
+            for (int i = 0; i < result.Size; i++)
+            {
+                result[i] = vector[i] - scalar;
+            }
+
+            return result;
+        }
+
+        public static VectorDecimal operator *(VectorDecimal vector1, VectorDecimal vector2)
+        {
+            if (vector1.Size != vector2.Size)
+            {
+                Console.WriteLine("Vectors must have the same size to perform multiplication.");
+                return null;
+            }
+
+            VectorDecimal result = new VectorDecimal(vector1.Size);
+
+            for (int i = 0; i < result.Size; i++)
+            {
+                result[i] = vector1[i] * vector2[i];
+            }
+
+            return result;
+        }
+
+        public static VectorDecimal operator *(VectorDecimal vector, decimal scalar)
+        {
+            VectorDecimal result = new VectorDecimal(vector.Size);
+
+            for (int i = 0; i < result.Size; i++)
+            {
+                result[i] = vector[i] * scalar;
+            }
+
+            return result;
+        }
+
+        public static VectorDecimal operator /(VectorDecimal vector1, VectorDecimal vector2)
+        {
+            if (vector1.Size != vector2.Size)
+            {
+                Console.WriteLine("Vectors must have the same size to perform division.");
+                return null;
+            }
+
+            VectorDecimal result = new VectorDecimal(vector1.Size);
+
+            for (int i = 0; i < result.Size; i++)
+            {
+                result[i] = vector1[i] / vector2[i];
+            }
+
+            return result;
+        }
+
+        public static VectorDecimal operator /(VectorDecimal vector, decimal scalar)
+        {
+            VectorDecimal result = new VectorDecimal(vector.Size);
+
+            for (int i = 0; i < result.Size; i++)
+            {
+                result[i] = vector[i] / scalar;
+            }
+
+            return result;
+        }
+
+        public static VectorDecimal operator %(VectorDecimal vector1, VectorDecimal vector2)
+        {
+            if (vector1.Size != vector2.Size)
+            {
+                Console.WriteLine("Vectors must have the same size to perform modulo operation.");
+                return null;
+            }
+
+            VectorDecimal result = new VectorDecimal(vector1.Size);
+
+            for (int i = 0; i < result.Size; i++)
+            {
+                result[i] = vector1[i] % vector2[i];
+            }
+
+            return result;
+        }
+
+        public static VectorDecimal operator %(VectorDecimal vector, decimal scalar)
+        {
+            VectorDecimal result = new VectorDecimal(vector.Size);
+
+            for (int i = 0; i < result.Size; i++)
+            {
+                result[i] = vector[i] % scalar;
+            }
+
+            return result;
+        }
 
     }
+
+
     static void task2()
     {
         VectorDecimal vector = new VectorDecimal(3);
@@ -329,7 +480,69 @@ class Program
         {
             Console.WriteLine($"Element at index {i}: {vector[i]}, Error code: {vector.CodeError}");
         }
+
+        VectorDecimal vector1 = new VectorDecimal(3);
+        VectorDecimal vector2 = new VectorDecimal(3);
+        decimal scalar = 10;
+
+        Console.WriteLine("Enter elements of the first vector:");
+        vector1.InputElements();
+
+        Console.WriteLine("Enter elements of the second vector:");
+        vector2.InputElements();
+
+        VectorDecimal vectorSum = vector1 + vector2;
+        if (vectorSum != null)
+        {
+            Console.WriteLine("Sum of vectors:");
+            vectorSum.PrintElements();
+        }
+        VectorDecimal vectorScalarSum = vector1 + scalar;
+        Console.WriteLine("Sum of first vector and scalar:");
+        vectorScalarSum.PrintElements();
+
+        VectorDecimal vectorMinus = vector1 - vector2;
+        if (vectorMinus != null)
+        {
+            Console.WriteLine("Difference of vectors:");
+            vectorMinus.PrintElements();
+        }
+        VectorDecimal vectorScalarMinus = vector1 - scalar;
+        Console.WriteLine("Difference of first vector and scalar:");
+        vectorScalarMinus.PrintElements();
+
+        VectorDecimal vectorMult = vector1 * vector2;
+        if (vectorMult != null)
+        {
+            Console.WriteLine("Element-wise multiplication of vectors:");
+            vectorMult.PrintElements();
+        }
+        VectorDecimal vectorScalarMult = vector1 * scalar;
+        Console.WriteLine("Multiplication of first vector by scalar:");
+        vectorScalarMult.PrintElements();
+
+        VectorDecimal vectorDivision = vector1 / vector2;
+        if (vectorDivision != null)
+        {
+            Console.WriteLine("Element-wise division of vectors:");
+            vectorDivision.PrintElements();
+        }
+        VectorDecimal vectorScalarDivision = vector1 / scalar;
+        Console.WriteLine("Division of first vector by scalar:");
+        vectorScalarDivision.PrintElements();
+
+        VectorDecimal vectorRem = vector1 % vector2;
+        if (vectorRem != null)
+        {
+            Console.WriteLine("Element-wise remainder of vectors:");
+            vectorRem.PrintElements();
+        }
+        VectorDecimal vectorScalarRem = vector1 % scalar;
+        Console.WriteLine("Remainder of first vector by scalar:");
+        vectorScalarRem.PrintElements();
     }
+
+
 
     class DecimalMatrix
     {
@@ -419,7 +632,6 @@ class Program
             }
         }
 
-        // Статичний метод для підрахунку кількості матриць
         public static int CountMatrices()
         {
             return num_mf;
@@ -582,3 +794,4 @@ class Program
         Console.ReadKey();
     }
 }
+
