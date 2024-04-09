@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 
 class Program
 {
@@ -460,13 +461,225 @@ class Program
             return result;
         }
 
+
+        public static VectorDecimal operator |(VectorDecimal vector1, VectorDecimal vector2)
+        {
+            if (vector1.Size != vector2.Size)
+            {
+                Console.WriteLine("Vectors must have the same size to perform bitwise OR.");
+                return null;
+            }
+
+            VectorDecimal result = new VectorDecimal(vector1.Size);
+
+            for (int i = 0; i < result.Size; i++)
+            {
+                result[i] = (decimal)((int)vector1[i] | (int)vector2[i]);
+            }
+
+            return result;
+        }
+
+        public static VectorDecimal operator |(VectorDecimal vector, decimal scalar)
+        {
+            VectorDecimal result = new VectorDecimal(vector.Size);
+            for (int i = 0; i < result.Size; i++)
+            {
+                result[i] = (decimal)((int)vector[i] | (int)scalar);
+            }
+            return result;
+        }
+
+        public static VectorDecimal operator ^(VectorDecimal vector1, VectorDecimal vector2)
+        {
+            if (vector1.Size != vector2.Size)
+            {
+                Console.WriteLine("Vectors must have the same size to perform bitwise XOR.");
+                return null;
+            }
+
+            VectorDecimal result = new VectorDecimal(vector1.Size);
+
+            for (int i = 0; i < result.Size; i++)
+            {
+                result[i] = (decimal)((int)vector1[i] ^ (int)vector2[i]);
+            }
+
+            return result;
+        }
+
+
+        public static VectorDecimal operator ^(VectorDecimal vector, decimal scalar)
+        {
+            VectorDecimal result = new VectorDecimal(vector.Size);
+            for (int i = 0; i < result.Size; i++)
+            {
+                result[i] = (decimal)((int)vector[i] ^ (int)scalar);
+            }
+            return result;
+        }
+
+        public static VectorDecimal operator &(VectorDecimal vector1, VectorDecimal vector2)
+        {
+            if (vector1.Size != vector2.Size)
+            {
+                Console.WriteLine("Vectors must have the same size to perform bitwise AND.");
+                return null;
+            }
+
+            VectorDecimal result = new VectorDecimal(vector1.Size);
+
+            for (int i = 0; i < result.Size; i++)
+            {
+                result[i] = (decimal)((int)vector1[i] & (int)vector2[i]);
+            }
+
+            return result;
+        }
+
+        public static VectorDecimal operator &(VectorDecimal vector, decimal scalar)
+        {
+            VectorDecimal result = new VectorDecimal(vector.Size);
+            for (int i = 0; i < result.Size; i++)
+            {
+                result[i] = (decimal)((int)vector[i] & (int)scalar);
+            }
+            return result;
+        }
+        public static VectorDecimal operator >>(VectorDecimal vector, int shift)
+        {
+            VectorDecimal result = new VectorDecimal(vector.Size);
+
+            for (int i = 0; i < result.Size; i++)
+            {
+                result[i] = (decimal)((int)vector[i] >> shift);
+            }
+
+            return result;
+        }
+
+        public static VectorDecimal operator <<(VectorDecimal vector, int shift)
+        {
+            VectorDecimal result = new VectorDecimal(vector.Size);
+
+            for (int i = 0; i < result.Size; i++)
+            {
+                result[i] = (decimal)((int)vector[i] << shift);
+            }
+
+            return result;
+        }
+
+        public static bool operator ==(VectorDecimal vector1, VectorDecimal vector2)
+        {
+            if (object.ReferenceEquals(vector1, null) || object.ReferenceEquals(vector2, null))
+            {
+                return false;
+            }
+
+            if (vector1.Size != vector2.Size)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < vector1.Size; i++)
+            {
+                if (vector1[i] != vector2[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool operator !=(VectorDecimal vector1, VectorDecimal vector2)
+        {
+            return !(vector1 == vector2);
+        }
+
+        public static bool operator >(VectorDecimal vector1, VectorDecimal vector2)
+        {
+            if (vector1.Size != vector2.Size)
+            {
+                Console.WriteLine("Vectors must have the same size to perform comparison.");
+                return false;
+            }
+
+            for (int i = 0; i < vector1.Size; i++)
+            {
+                if (vector1[i] <= vector2[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool operator >=(VectorDecimal vector1, VectorDecimal vector2)
+        {
+            if (vector1.Size != vector2.Size)
+            {
+                Console.WriteLine("Vectors must have the same size to perform comparison.");
+                return false;
+            }
+
+            for (int i = 0; i < vector1.Size; i++)
+            {
+                if (vector1[i] < vector2[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool operator <(VectorDecimal vector1, VectorDecimal vector2)
+        {
+            if (vector1.Size != vector2.Size)
+            {
+                Console.WriteLine("Vectors must have the same size to perform comparison.");
+                return false;
+            }
+
+            for (int i = 0; i < vector1.Size; i++)
+            {
+                if (vector1[i] >= vector2[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool operator <=(VectorDecimal vector1, VectorDecimal vector2)
+        {
+            if (vector1.Size != vector2.Size)
+            {
+                Console.WriteLine("Vectors must have the same size to perform comparison.");
+                return false;
+            }
+
+            for (int i = 0; i < vector1.Size; i++)
+            {
+                if (vector1[i] > vector2[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 
 
     static void task2()
     {
         VectorDecimal vector = new VectorDecimal(3);
-
+            
         Console.WriteLine("Enter elements of the vector:");
         vector.InputElements();
 
@@ -516,7 +729,7 @@ class Program
         VectorDecimal vectorMult = vector1 * vector2;
         if (vectorMult != null)
         {
-            Console.WriteLine("Element-wise multiplication of vectors:");
+            Console.WriteLine("Multiplication of vectors:");
             vectorMult.PrintElements();
         }
         VectorDecimal vectorScalarMult = vector1 * scalar;
@@ -542,6 +755,56 @@ class Program
         VectorDecimal vectorScalarRem = vector1 % scalar;
         Console.WriteLine("Remainder of first vector by scalar:");
         vectorScalarRem.PrintElements();
+
+        Console.WriteLine("\nBitwise OR operation between vector1 and vector2:");
+        VectorDecimal bitwiseOR = vector1 | vector2;
+        bitwiseOR.PrintElements();
+
+        Console.WriteLine("\nBitwise OR operation between vector1 and scalar:");
+        VectorDecimal bitwiseORScalar = vector1 | 5;
+        bitwiseORScalar.PrintElements();
+
+        Console.WriteLine("\nBitwise XOR operation between vector1 and vector2:");
+        VectorDecimal bitwiseXOR = vector1 ^ vector2;
+        bitwiseXOR.PrintElements();
+
+        Console.WriteLine("\nBitwise XOR operation between vector1 and scalar:");
+        VectorDecimal bitwiseXORScalar = vector1 ^ 5;
+        bitwiseXORScalar.PrintElements();
+
+        Console.WriteLine("\nBitwise AND operation between vector1 and vector2:");
+        VectorDecimal bitwiseAND = vector1 & vector2;
+        bitwiseAND.PrintElements();
+
+        Console.WriteLine("\nBitwise AND operation between vector1 and scalar:");
+        VectorDecimal bitwiseANDScalar = vector1 & 5;
+        bitwiseANDScalar.PrintElements();
+
+        Console.WriteLine("\nBitwise right shift operation of vector1 by 2 bits:");
+        VectorDecimal rightShift = vector1 >> 2;
+        rightShift.PrintElements();
+
+        Console.WriteLine("\nBitwise left shift operation of vector1 by 2 bits:");
+        VectorDecimal leftShift = vector1 << 2;
+        leftShift.PrintElements();
+
+        Console.WriteLine("\nEquality check between vector1 and vector2:");
+        Console.WriteLine(vector1 == vector2);
+
+        Console.WriteLine("\nInequality check between vector1 and vector2:");
+        Console.WriteLine(vector1 != vector2);
+
+        Console.WriteLine("\nComparison: vector1 greater than vector2:");
+        Console.WriteLine(vector1 > vector2);
+
+        Console.WriteLine("\nComparison: vector1 greater than or equal to vector2:");
+        Console.WriteLine(vector1 >= vector2);
+
+        Console.WriteLine("\nComparison: vector1 less than vector2:");
+        Console.WriteLine(vector1 < vector2);
+
+        Console.WriteLine("\nComparison: vector1 less than or equal to vector2:");
+        Console.WriteLine(vector1 <= vector2);
     }
 
 
@@ -1064,6 +1327,40 @@ class Program
             return result;
         }
 
+        public static DecimalMatrix operator >>(DecimalMatrix matrix, int shift)
+        {
+            DecimalMatrix result = new DecimalMatrix(matrix.n, matrix.m);
+
+            for (uint i = 0; i < matrix.n; i++)
+            {
+                for (uint j = 0; j < matrix.m; j++)
+                {
+                    long intValue = decimal.ToInt64(matrix[i, j]);
+                    long resultValue = intValue >> shift;
+                    result[i, j] = decimal.FromOACurrency(resultValue);
+                }
+            }
+
+            return result;
+        }
+
+        public static DecimalMatrix operator <<(DecimalMatrix matrix, int shift)
+        {
+            DecimalMatrix result = new DecimalMatrix(matrix.n, matrix.m);
+
+            for (uint i = 0; i < matrix.n; i++)
+            {
+                for (uint j = 0; j < matrix.m; j++)
+                {
+                    long intValue = decimal.ToInt64(matrix[i, j]);
+                    long resultValue = intValue << shift;
+                    result[i, j] = decimal.FromOACurrency(resultValue);
+                }
+            }
+
+            return result;
+        }
+
         public static bool operator ==(DecimalMatrix matrix1, DecimalMatrix matrix2)
         {
             if (ReferenceEquals(matrix1, matrix2))
@@ -1304,6 +1601,14 @@ class Program
         Console.WriteLine("\nBitwise AND operation between matrix1 and scalar:");
         DecimalMatrix bitwiseANDScalar = matrix1 & 5;
         bitwiseANDScalar.DisplayElements();
+
+        Console.WriteLine("\nBitwise right shift operation of matrix1 by 2 bits:");
+        DecimalMatrix rightShift = matrix1 >> 2;
+        rightShift.DisplayElements();
+
+        Console.WriteLine("\nBitwise left shift operation of matrix1 by 2 bits:");
+        DecimalMatrix leftShift = matrix1 << 2;
+        leftShift.DisplayElements();
 
         Console.WriteLine("\nEquality check between matrix1 and matrix2:");
         Console.WriteLine(matrix1 == matrix2);
