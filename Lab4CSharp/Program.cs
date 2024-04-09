@@ -144,6 +144,7 @@ class Program
         Console.WriteLine("Operator*" + Operator3);
     }
 
+
     class VectorDecimal
     {
         decimal[] ArrayDecimal;
@@ -151,6 +152,7 @@ class Program
         int codeError;
         static uint num_vec;
 
+        // Конструктори
         public VectorDecimal()
         {
             ArrayDecimal = new decimal[1];
@@ -178,15 +180,122 @@ class Program
             }
         }
 
+        // Деструктор
         ~VectorDecimal()
         {
             Console.WriteLine("Vector has been destructed.");
         }
 
+        // Метод, що дозволяє ввести елементи вектора з клавіатури
+        public void InputElements()
+        {
+            for (int i = 0; i < ArrayDecimal.Length; i++)
+            {
+                Console.Write($"Enter element {i + 1}: ");
+                if (!decimal.TryParse(Console.ReadLine(), out ArrayDecimal[i]))
+                {
+                    Console.WriteLine("Invalid input! Please enter a valid decimal.");
+                    i--; // Повторення для введення коректного значення
+                }
+            }
+        }
+
+        // Метод, що дозволяє вивести елементи вектора на екран
+        public void PrintElements()
+        {
+            Console.WriteLine("Vector elements:");
+            foreach (var element in ArrayDecimal)
+            {
+                Console.WriteLine(element);
+            }
+        }
+
+        // Метод, що присвоює елементам масиву вектора деяке значення
+        public void AssignValue(decimal value)
+        {
+            for (int i = 0; i < ArrayDecimal.Length; i++)
+            {
+                ArrayDecimal[i] = value;
+            }
+        }
+
+        // Статичний метод, що підраховує кількість векторів даного типу
+        public static uint CountVectors()
+        {
+            return num_vec;
+        }
+
+        // Властивість, що повертає розмірність вектора
+        public uint Size
+        {
+            get { return num; }
+        }
+
+        // Властивість для доступу до поля codeError
+        public int CodeError
+        {
+            get { return codeError; }
+            set { codeError = value; }
+        }
+
+        // Індексатор
+        public decimal this[int index]
+        {
+            get
+            {
+                if (index < 0 || index >= ArrayDecimal.Length)
+                {
+                    codeError = -1;
+                    return 0; // Повертаємо дефолтне значення
+                }
+                else
+                {
+                    codeError = 0;
+                    return ArrayDecimal[index];
+                }
+            }
+            set
+            {
+                if (index < 0 || index >= ArrayDecimal.Length)
+                {
+                    codeError = -1;
+                }
+                else
+                {
+                    ArrayDecimal[index] = value;
+                    codeError = 0;
+                }
+            }
+        }
+
     }
     static void task2()
     {
+        // Створення об'єкту вектора
+        VectorDecimal vector = new VectorDecimal(3);
 
+        // Ввід елементів вектора з клавіатури
+        Console.WriteLine("Enter elements of the vector:");
+        vector.InputElements();
+
+        // Виведення елементів вектора на екран
+        vector.PrintElements();
+
+        // Присвоєння всім елементам вектора деякого значення
+        vector.AssignValue(5);
+
+        // Виведення зміненої структури вектора
+        vector.PrintElements();
+
+        // Підрахунок кількості векторів
+        Console.WriteLine($"Number of vectors: {VectorDecimal.CountVectors()}");
+
+        // Використання індексатора
+        Console.WriteLine("Accessing vector elements using indexer:");
+        for (int i = 0; i < vector.Size + 1; i++)
+        {
+            Console.WriteLine($"Element at index {i}: {vector[i]}, Error code: {vector.CodeError}");
+        }
     }
 
     static void task3()
